@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"holonet/web"
 	"log"
 	"net/http"
+	"os"
 )
 
 const DefaultAddress = ":8010"
@@ -26,5 +28,8 @@ func (app *Application) Run(address string) {
 	} else {
 		appAddress = DefaultAddress
 	}
-	log.Fatal(http.ListenAndServe(appAddress, app.Router))
+
+	loggedRouter := handlers.LoggingHandler(os.Stdout, app.Router)
+
+	log.Fatal(http.ListenAndServe(appAddress, loggedRouter))
 }
