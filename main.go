@@ -8,5 +8,5 @@ func main() {
 	app.Initialize()
 
 	// run application (server)
-	app.Run(os.Getenv("ADDRESS"))
+	app.Run(os.Getenv("PORT"))
 }
