@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
+	url2 "net/url"
 )
 
 func InitializeRoutes(router *mux.Router) {
@@ -29,17 +30,42 @@ func RootHandler(writer http.ResponseWriter, _ *http.Request) {
 	})
 }
 
-func APIRootHandler(writer http.ResponseWriter, _ *http.Request) {
+func APIRootHandler(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Header().Set("Accept", "application/json")
 
+	siteRoute := func(path string) string {
+		tlsStatus := request.TLS
+		var urlScheme string
+
+		if tlsStatus == nil {
+			urlScheme = "http"
+		} else {
+			urlScheme = "https"
+		}
+
+		var routeURL string
+
+		url, err := url2.Parse(path)
+		if err == nil {
+			url.Scheme = urlScheme
+			url.Host = request.Host
+
+			routeURL = url.String()
+		} else {
+			routeURL = "#"
+		}
+
+		return routeURL
+	}
+
 	siteRoutes := map[string]string{
-		"people":    "http://holonet.ai/api/people/",
-		"planets":   "http://holonet.ai/api/planets/",
-		"films":     "http://holonet.ai/api/films/",
-		"species":   "http://holonet.ai/api/species/",
-		"vehicles":  "http://holonet.ai/api/vehicles/",
-		"starships": "http://holonet.ai/api/starships/",
+		"people":    siteRoute("/api/people/"),
+		"planets":   siteRoute("/api/planets/"),
+		"films":     siteRoute("/api/films/"),
+		"species":   siteRoute("/api/species/"),
+		"vehicles":  siteRoute("/api/vehicles/"),
+		"starships": siteRoute("/api/starships/"),
 	}
 
 	writeJSON(writer, siteRoutes)
