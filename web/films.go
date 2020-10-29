@@ -2,23 +2,9 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data"
 	"net/http"
 )
-
-type Film struct {
-	Title        string     `json:"title"`
-	EpisodeId    int        `json:"episode_id"`
-	OpeningCrawl string     `json:"opening_crawl"`
-	Director     string     `json:"director"`
-	Producer     string     `json:"producer"`
-	ReleaseDate  string     `json:"release_date"`
-	Characters   []Person   `json:"characters"`
-	Planets      []Planet   `json:"planets"`
-	Starships    []Starship `json:"starships"`
-	Vehicles     []Vehicle  `json:"vehicles"`
-	Species      []Species  `json:"species"`
-	Metadata
-}
 
 func initializeFilmsRoutes(router *mux.Router) {
 	subrouter := router.PathPrefix("/films").Subrouter()
@@ -28,7 +14,7 @@ func initializeFilmsRoutes(router *mux.Router) {
 
 type Films struct {
 	ResponseData
-	Results []Film `json:"results"`
+	Results []data.Film `json:"results"`
 }
 
 func FilmsHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -39,7 +25,7 @@ func FilmsHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func FilmHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Film{
+	writeJSON(writer, data.Film{
 		Title:        "",
 		EpisodeId:    0,
 		OpeningCrawl: "",
@@ -51,6 +37,6 @@ func FilmHandler(writer http.ResponseWriter, _ *http.Request) {
 		Starships:    nil,
 		Vehicles:     nil,
 		Species:      nil,
-		Metadata:     Metadata{},
+		Metadata:     data.Metadata{},
 	})
 }

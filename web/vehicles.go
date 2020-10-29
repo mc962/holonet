@@ -2,29 +2,13 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data"
 	"net/http"
 )
 
-type Vehicle struct {
-	Name                 string   `json:"name"`
-	Model                string   `json:"model"`
-	Manufacturer         string   `json:"manufacturer"`
-	CostInCredits        string   `json:"cost_in_credits"`
-	Length               string   `json:"length"`
-	MaxAtmospheringSpeed string   `json:"max_atmosphering_speed"`
-	Crew                 string   `json:"crew"`
-	Passengers           string   `json:"passengers"`
-	CargoCapacity        string   `json:"cargo_capacity"`
-	Consumables          string   `json:"consumables"`
-	VehicleClass         string   `json:"vehicle_class"`
-	Pilots               []Person `json:"pilots"`
-	Films                []Film   `json:"films"`
-	Metadata
-}
-
 type Vehicles struct {
-	Metadata
-	Results []Vehicle `json:"results"`
+	data.Metadata
+	Results []data.Vehicle `json:"results"`
 }
 
 func initializeVehiclesRoutes(router *mux.Router) {
@@ -35,13 +19,13 @@ func initializeVehiclesRoutes(router *mux.Router) {
 
 func VehiclesHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, Vehicles{
-		Metadata: Metadata{},
+		Metadata: data.Metadata{},
 		Results:  nil,
 	})
 }
 
 func VehicleHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Vehicle{
+	writeJSON(writer, data.Vehicle{
 		Name:                 "",
 		Model:                "",
 		Manufacturer:         "",
@@ -55,6 +39,6 @@ func VehicleHandler(writer http.ResponseWriter, _ *http.Request) {
 		VehicleClass:         "",
 		Pilots:               nil,
 		Films:                nil,
-		Metadata:             Metadata{},
+		Metadata:             data.Metadata{},
 	})
 }

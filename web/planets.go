@@ -2,23 +2,9 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data"
 	"net/http"
 )
-
-type Planet struct {
-	Name           string   `json:"name"`
-	RotationPeriod string   `json:"rotation_period"`
-	OrbitalPeriod  string   `json:"orbital_period"`
-	Diameter       string   `json:"diameter"`
-	Climate        string   `json:"climate"`
-	Gravity        string   `json:"gravity"`
-	Terrain        string   `json:"terrain"`
-	SurfaceWater   string   `json:"surface_water"`
-	Population     string   `json:"population"`
-	Residents      []Person `json:"residents"`
-	Films          []Film   `json:"films"`
-	Metadata
-}
 
 type Planets struct {
 	ResponseData
@@ -39,7 +25,7 @@ func PlanetsHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Planet{
+	writeJSON(writer, data.Planet{
 		Name:           "",
 		RotationPeriod: "",
 		OrbitalPeriod:  "",
@@ -51,6 +37,6 @@ func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
 		Population:     "",
 		Residents:      nil,
 		Films:          nil,
-		Metadata:       Metadata{},
+		Metadata:       data.Metadata{},
 	})
 }

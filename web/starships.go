@@ -2,31 +2,13 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data"
 	"net/http"
 )
 
-type Starship struct {
-	Name                 string   `json:"name"`
-	Model                string   `json:"model"`
-	Manufacturer         string   `json:"manufacturer"`
-	CostInCredits        string   `json:"cost_in_credits"`
-	Length               string   `json:"length"`
-	MaxAtmospheringSpeed string   `json:"max_atmosphering_speed"`
-	Crew                 string   `json:"crew"`
-	Passengers           string   `json:"passengers"`
-	CargoCapacity        string   `json:"cargo_capacity"`
-	Consumables          string   `json:"consumables"`
-	HyperdriveRating     string   `json:"hyperdrive_rating"`
-	MGLT                 string   `json:"mglt"`
-	StarshipClass        string   `json:"starship_class"`
-	Pilots               []Person `json:"pilots"`
-	Films                []Film   `json:"films"`
-	Metadata
-}
-
 type Starships struct {
 	ResponseData
-	Results []Starship `json:"results"`
+	Results []data.Starship `json:"results"`
 }
 
 func initializeStarshipsRoutes(router *mux.Router) {
@@ -43,7 +25,7 @@ func StarshipsHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func StarshipHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Starship{
+	writeJSON(writer, data.Starship{
 		Name:                 "",
 		Model:                "",
 		Manufacturer:         "",
@@ -59,6 +41,6 @@ func StarshipHandler(writer http.ResponseWriter, _ *http.Request) {
 		StarshipClass:        "",
 		Pilots:               nil,
 		Films:                nil,
-		Metadata:             Metadata{},
+		Metadata:             data.Metadata{},
 	})
 }
