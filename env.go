@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/jackc/pgx"
 	"holonet/data"
 	"holonet/web"
 	"log"
@@ -20,11 +21,12 @@ const DefaultPort = 8080
 type Env struct {
 	Router *mux.Router
 	Wait   time.Duration
+	Conn   *pgx.Conn
 	Models data.Models
 }
 
 func (env *Env) Initialize() {
-	env.Models = data.Initialize()
+	env.Conn, env.Models = data.Initialize()
 	env.Router = web.Initialize()
 }
 

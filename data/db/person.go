@@ -1,7 +1,9 @@
 package db
 
-import "database/sql"
+import (
+	"github.com/jackc/pgx"
+)
 
 type Person struct {
-	DB *sql.DB
+	DB *pgx.Conn
 }

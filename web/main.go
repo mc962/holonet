@@ -23,5 +23,5 @@ func RegisterRoutes(router *mux.Router) *mux.Router {
 	initializeStarshipsRoutes(subrouter)
 	initializeVehiclesRoutes(subrouter)
 
-	return subrouter
+	return router
 }

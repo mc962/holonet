@@ -1,24 +1,30 @@
 package data
 
 import (
-	"database/sql"
-	_ "github.com/jackc/pgx"
-	_ "github.com/jackc/pgx/stdlib"
+	"github.com/jackc/pgx"
 	"holonet/data/db"
 	"log"
 )
 
-func Initialize() Models {
-	database, err := sql.Open("pgx", "postgres://holonet_local:local@localhost:5433/holonet_dev")
-	if err != nil {
-		log.Fatalln(err)
+func Initialize() (*pgx.Conn, Models) {
+	config := pgx.ConnConfig{
+		Host:     "localhost",
+		Port:     5433,
+		Database: "holonet_dev",
+		User:     "holonet_local",
+		Password: "local",
 	}
-	models := RegisterModels(database)
+	conn, err := pgx.Connect(config)
+	if err != nil {
+		log.Fatalf("Unable to connect to database: %v\n", err)
+	}
 
-	return models
+	models := RegisterModels(conn)
+
+	return conn, models
 }
 
-func RegisterModels(database *sql.DB) Models {
+func RegisterModels(database *pgx.Conn) Models {
 	return Models{
 		Film:     db.Film{DB: database},
 		Person:   db.Person{DB: database},

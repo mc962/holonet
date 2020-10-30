@@ -1,15 +1,15 @@
 package db
 
 import (
-	"database/sql"
+	"github.com/jackc/pgx"
 	"holonet/data/resource"
 )
 
 type Film struct {
-	DB *sql.DB
+	DB *pgx.Conn
 }
 
-func (film Film) All(db *sql.DB) ([]resource.Film, error) {
+func (film Film) All(db *pgx.Conn) ([]resource.Film, error) {
 	rows, err := db.Query("SELECT * FROM films;")
 
 	if err != nil {
