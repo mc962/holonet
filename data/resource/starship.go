@@ -1,6 +1,6 @@
-package data
+package resource
 
-type Vehicle struct {
+type Starship struct {
 	Name                 string   `json:"name"`
 	Model                string   `json:"model"`
 	Manufacturer         string   `json:"manufacturer"`
@@ -11,7 +11,9 @@ type Vehicle struct {
 	Passengers           string   `json:"passengers"`
 	CargoCapacity        string   `json:"cargo_capacity"`
 	Consumables          string   `json:"consumables"`
-	VehicleClass         string   `json:"vehicle_class"`
+	HyperdriveRating     string   `json:"hyperdrive_rating"`
+	MGLT                 string   `json:"mglt"`
+	StarshipClass        string   `json:"starship_class"`
 	Pilots               []Person `json:"pilots"`
 	Films                []Film   `json:"films"`
 	Metadata

@@ -1,4 +1,4 @@
-package data
+package resource
 
 type Metadata struct {
 	Created string `json:"created"`

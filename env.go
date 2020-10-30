@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"holonet/data"
 	"holonet/web"
 	"log"
 	"net/http"
@@ -16,18 +17,18 @@ import (
 
 const DefaultPort = 8080
 
-type Application struct {
+type Env struct {
 	Router *mux.Router
 	Wait   time.Duration
+	Models data.Models
 }
 
-func (app *Application) Initialize() {
-	app.Router = mux.NewRouter().StrictSlash(true)
-
-	web.InitializeRoutes(app.Router)
+func (env *Env) Initialize() {
+	env.Models = data.Initialize()
+	env.Router = web.Initialize()
 }
 
-func (app *Application) Run(port string) {
+func (env *Env) Run(port string) {
 	var appPort int
 	if len(port) > 0 {
 		var err error
@@ -40,7 +41,7 @@ func (app *Application) Run(port string) {
 		appPort = DefaultPort
 	}
 
-	loggedRouter := handlers.LoggingHandler(os.Stdout, app.Router)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, env.Router)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("0.0.0.0:%d", appPort),
@@ -67,7 +68,7 @@ func (app *Application) Run(port string) {
 	<-channel
 
 	// Create a deadline to wait for.
-	ctx, cancel := context.WithTimeout(context.Background(), app.Wait)
+	ctx, cancel := context.WithTimeout(context.Background(), env.Wait)
 
 	defer cancel()
 	// Doesn't block if no connections, but will otherwise wait

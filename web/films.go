@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/gorilla/mux"
-	"holonet/data"
+	"holonet/data/resource"
 	"net/http"
 )
 
@@ -14,7 +14,7 @@ func initializeFilmsRoutes(router *mux.Router) {
 
 type Films struct {
 	ResponseData
-	Results []data.Film `json:"results"`
+	Results []resource.Film `json:"results"`
 }
 
 func FilmsHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -25,7 +25,7 @@ func FilmsHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func FilmHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, data.Film{
+	writeJSON(writer, resource.Film{
 		Title:        "",
 		EpisodeId:    0,
 		OpeningCrawl: "",
@@ -37,6 +37,6 @@ func FilmHandler(writer http.ResponseWriter, _ *http.Request) {
 		Starships:    nil,
 		Vehicles:     nil,
 		Species:      nil,
-		Metadata:     data.Metadata{},
+		Metadata:     resource.Metadata{},
 	})
 }

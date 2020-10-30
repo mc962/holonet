@@ -1,4 +1,4 @@
-package data
+package resource
 
 type Planet struct {
 	Name           string   `json:"name"`

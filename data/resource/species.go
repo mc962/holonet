@@ -1,4 +1,4 @@
-package data
+package resource
 
 type Species struct {
 	Name            string   `json:"name"`

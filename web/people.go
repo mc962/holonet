@@ -2,13 +2,13 @@ package web
 
 import (
 	"github.com/gorilla/mux"
-	"holonet/data"
+	"holonet/data/resource"
 	"net/http"
 )
 
 type People struct {
 	ResponseData
-	Results []data.Person `json:"results"`
+	Results []resource.Person `json:"results"`
 }
 
 func initializePeopleRoutes(router *mux.Router) {
@@ -25,7 +25,7 @@ func PeopleHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func PersonHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, data.Person{
+	writeJSON(writer, resource.Person{
 		Name:      "",
 		Height:    "",
 		Mass:      "",
@@ -39,6 +39,6 @@ func PersonHandler(writer http.ResponseWriter, _ *http.Request) {
 		Species:   nil,
 		Vehicles:  nil,
 		Starships: nil,
-		Metadata:  data.Metadata{},
+		Metadata:  resource.Metadata{},
 	})
 }

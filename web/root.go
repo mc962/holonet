@@ -2,25 +2,9 @@ package web
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	url2 "net/url"
 )
-
-func InitializeRoutes(router *mux.Router) {
-	// top-level routes
-	router.HandleFunc("/", RootHandler)
-	subrouter := router.PathPrefix("/api").Subrouter().StrictSlash(true)
-	subrouter.HandleFunc("/", APIRootHandler)
-
-	// namespaced resource routes
-	initializeFilmsRoutes(subrouter)
-	initializePeopleRoutes(subrouter)
-	initializePlanetsRoutes(subrouter)
-	initializeSpeciesRouter(subrouter)
-	initializeStarshipsRoutes(subrouter)
-	initializeVehiclesRoutes(subrouter)
-}
 
 func RootHandler(writer http.ResponseWriter, _ *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")

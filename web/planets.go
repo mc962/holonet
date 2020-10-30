@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/gorilla/mux"
-	"holonet/data"
+	"holonet/data/resource"
 	"net/http"
 )
 
@@ -25,7 +25,7 @@ func PlanetsHandler(writer http.ResponseWriter, _ *http.Request) {
 }
 
 func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, data.Planet{
+	writeJSON(writer, resource.Planet{
 		Name:           "",
 		RotationPeriod: "",
 		OrbitalPeriod:  "",
@@ -37,6 +37,6 @@ func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
 		Population:     "",
 		Residents:      nil,
 		Films:          nil,
-		Metadata:       data.Metadata{},
+		Metadata:       resource.Metadata{},
 	})
 }

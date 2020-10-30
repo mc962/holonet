@@ -4,7 +4,7 @@ import "os"
 
 func main() {
 	// create a new application instance, and run through application initialization steps
-	app := Application{}
+	app := Env{}
 	app.Initialize()
 
 	// run application (server)
