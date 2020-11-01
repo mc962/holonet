@@ -4,7 +4,7 @@ CREATE TABLE starships(
     -- based on name
     slug CHARACTER VARYING NOT NULL,
     model CHARACTER VARYING NOT NULL,
-    manufacturer CHARACTER VARYING NOT NULL,
+    manufacturer CHARACTER VARYING ARRAY,
     -- unknown translated to NULL
     cost_in_credits INTEGER,
     length FLOAT NOT NULL,
