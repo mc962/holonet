@@ -9,8 +9,8 @@ type Film struct {
 	DB *pgx.Conn
 }
 
-func (film Film) All(db *pgx.Conn) ([]resource.Film, error) {
-	rows, err := db.Query("SELECT * FROM films;")
+func (film Film) All() ([]resource.Film, error) {
+	rows, err := film.DB.Query("SELECT * FROM films;")
 
 	if err != nil {
 		return nil, err

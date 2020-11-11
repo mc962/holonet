@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
 )
@@ -18,10 +19,25 @@ type Films struct {
 }
 
 func FilmsHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Films{
-		ResponseData: ResponseData{},
-		Results:      nil,
-	})
+	films, err := db.Film{}.All()
+
+	if err == nil {
+		writeJSON(writer, Films{
+			ResponseData: ResponseData{
+				Count:    0,
+				Next:     "",
+				Previous: "",
+			},
+			Results: films,
+		})
+	} else {
+		writer.WriteHeader(http.StatusInternalServerError)
+
+		writeJSON(writer, Films{
+			ResponseData: ResponseData{},
+			Results:      nil,
+		})
+	}
 }
 
 func FilmHandler(writer http.ResponseWriter, _ *http.Request) {
