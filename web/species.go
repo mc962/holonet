@@ -2,8 +2,10 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
+	"strconv"
 )
 
 type ManySpecies struct {
@@ -18,26 +20,30 @@ func initializeSpeciesRouter(router *mux.Router) {
 }
 
 func AllSpeciesHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, ManySpecies{
-		ResponseData: ResponseData{},
-		Results:      nil,
-	}, 200)
+	species, err := db.AllSpecies()
+
+	if err == nil {
+		writeJSON(writer, ManySpecies{
+			ResponseData: ResponseData{
+				Count:    len(species),
+				Next:     "",
+				Previous: "",
+			},
+			Results: species,
+		}, 200)
+	} else {
+		handleIndexError(writer, err)
+	}
 }
 
-func SpeciesHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, resource.Species{
-		Name:            "",
-		Classification:  "",
-		Designation:     "",
-		AverageHeight:   "",
-		AverageLifespan: "",
-		HairColors:      "",
-		SkinColors:      "",
-		EyeColors:       "",
-		Homeworld:       "",
-		Language:        "",
-		People:          nil,
-		Films:           nil,
-		Metadata:        resource.Metadata{},
-	}, 200)
+func SpeciesHandler(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	speciesId, err := strconv.Atoi(vars["id"])
+	species, err := db.FindSpecies(speciesId)
+
+	if err == nil {
+		writeJSON(writer, species, 200)
+	} else {
+		handleFindError(writer, err)
+	}
 }

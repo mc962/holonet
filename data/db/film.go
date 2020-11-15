@@ -35,7 +35,7 @@ func FindFilm(id int) (resource.Film, error) {
 }
 
 func AllFilms() ([]resource.Film, error) {
-	rows, err := DB.Query("SELECT * FROM films")
+	rows, err := DB.Query("SELECT * FROM films;")
 
 	if err != nil {
 		return nil, err

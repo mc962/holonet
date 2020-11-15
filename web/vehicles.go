@@ -2,12 +2,14 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
+	"strconv"
 )
 
 type Vehicles struct {
-	resource.Metadata
+	ResponseData
 	Results []resource.Vehicle `json:"results"`
 }
 
@@ -18,27 +20,30 @@ func initializeVehiclesRoutes(router *mux.Router) {
 }
 
 func VehiclesHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Vehicles{
-		Metadata: resource.Metadata{},
-		Results:  nil,
-	}, 200)
+	vehicles, err := db.AllVehicles()
+
+	if err == nil {
+		writeJSON(writer, Vehicles{
+			ResponseData: ResponseData{
+				Count:    len(vehicles),
+				Next:     "",
+				Previous: "",
+			},
+			Results: vehicles,
+		}, 200)
+	} else {
+		handleIndexError(writer, err)
+	}
 }
 
-func VehicleHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, resource.Vehicle{
-		Name:                 "",
-		Model:                "",
-		Manufacturer:         "",
-		CostInCredits:        "",
-		Length:               "",
-		MaxAtmospheringSpeed: "",
-		Crew:                 "",
-		Passengers:           "",
-		CargoCapacity:        "",
-		Consumables:          "",
-		VehicleClass:         "",
-		Pilots:               nil,
-		Films:                nil,
-		Metadata:             resource.Metadata{},
-	}, 200)
+func VehicleHandler(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	vehicleId, err := strconv.Atoi(vars["id"])
+	vehicle, err := db.FindVehicle(vehicleId)
+
+	if err == nil {
+		writeJSON(writer, vehicle, 200)
+	} else {
+		handleFindError(writer, err)
+	}
 }

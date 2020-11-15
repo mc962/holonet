@@ -1,10 +1,13 @@
 package web
 
 import (
+	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	url2 "net/url"
 	"strconv"
+	"strings"
 )
 
 func writeJSON(writer http.ResponseWriter, response interface{}, statusCode int) {
@@ -62,4 +65,26 @@ func siteRoute(request *http.Request, path string) string {
 	}
 
 	return routeURL
+}
+
+func handleFindError(writer http.ResponseWriter, err error) {
+	var msg string
+	var statusCode int
+	if strings.Contains(sql.ErrNoRows.Error(), err.Error()) {
+		statusCode = http.StatusNotFound
+		msg = "Not Found"
+	} else {
+		statusCode = http.StatusInternalServerError
+		msg = "Server Error"
+	}
+	log.Println(err)
+	writeJSON(writer, ErrorResponse{Message: msg}, statusCode)
+}
+
+func handleIndexError(writer http.ResponseWriter, err error) {
+	log.Println(err)
+
+	writeJSON(writer, ErrorResponse{
+		Message: "Server Error",
+	}, 500)
 }

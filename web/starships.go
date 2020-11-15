@@ -2,8 +2,10 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
+	"strconv"
 )
 
 type Starships struct {
@@ -18,29 +20,30 @@ func initializeStarshipsRoutes(router *mux.Router) {
 }
 
 func StarshipsHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Starships{
-		ResponseData: ResponseData{},
-		Results:      nil,
-	}, 200)
+	starships, err := db.AllStarships()
+
+	if err == nil {
+		writeJSON(writer, Starships{
+			ResponseData: ResponseData{
+				Count:    len(starships),
+				Next:     "",
+				Previous: "",
+			},
+			Results: starships,
+		}, 200)
+	} else {
+		handleIndexError(writer, err)
+	}
 }
 
-func StarshipHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, resource.Starship{
-		Name:                 "",
-		Model:                "",
-		Manufacturer:         "",
-		CostInCredits:        "",
-		Length:               "",
-		MaxAtmospheringSpeed: "",
-		Crew:                 "",
-		Passengers:           "",
-		CargoCapacity:        "",
-		Consumables:          "",
-		HyperdriveRating:     "",
-		MGLT:                 "",
-		StarshipClass:        "",
-		Pilots:               nil,
-		Films:                nil,
-		Metadata:             resource.Metadata{},
-	}, 200)
+func StarshipHandler(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	starshipId, err := strconv.Atoi(vars["id"])
+	starship, err := db.FindStarship(starshipId)
+
+	if err == nil {
+		writeJSON(writer, starship, 200)
+	} else {
+		handleFindError(writer, err)
+	}
 }

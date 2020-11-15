@@ -2,8 +2,10 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
+	"strconv"
 )
 
 type People struct {
@@ -18,27 +20,30 @@ func initializePeopleRoutes(router *mux.Router) {
 }
 
 func PeopleHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, People{
-		ResponseData: ResponseData{},
-		Results:      nil,
-	}, 200)
+	people, err := db.AllPeople()
+
+	if err == nil {
+		writeJSON(writer, People{
+			ResponseData: ResponseData{
+				Count:    len(people),
+				Next:     "",
+				Previous: "",
+			},
+			Results: people,
+		}, 200)
+	} else {
+		handleIndexError(writer, err)
+	}
 }
 
-func PersonHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, resource.Person{
-		Name:      "",
-		Height:    "",
-		Mass:      "",
-		HairColor: "",
-		SkinColor: "",
-		EyeColor:  "",
-		BirthYear: "",
-		Gender:    "",
-		Homeworld: "",
-		Films:     nil,
-		Species:   nil,
-		Vehicles:  nil,
-		Starships: nil,
-		Metadata:  resource.Metadata{},
-	}, 200)
+func PersonHandler(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	personId, err := strconv.Atoi(vars["id"])
+	person, err := db.FindPerson(personId)
+
+	if err == nil {
+		writeJSON(writer, person, 200)
+	} else {
+		handleFindError(writer, err)
+	}
 }

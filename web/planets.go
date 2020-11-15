@@ -2,13 +2,15 @@ package web
 
 import (
 	"github.com/gorilla/mux"
+	"holonet/data/db"
 	"holonet/data/resource"
 	"net/http"
+	"strconv"
 )
 
 type Planets struct {
 	ResponseData
-	Results []Planets `json:"results"`
+	Results []resource.Planet `json:"results"`
 }
 
 func initializePlanetsRoutes(router *mux.Router) {
@@ -18,25 +20,30 @@ func initializePlanetsRoutes(router *mux.Router) {
 }
 
 func PlanetsHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, Planets{
-		ResponseData: ResponseData{},
-		Results:      nil,
-	}, 200)
+	planets, err := db.AllPlanets()
+
+	if err == nil {
+		writeJSON(writer, Planets{
+			ResponseData: ResponseData{
+				Count:    len(planets),
+				Next:     "",
+				Previous: "",
+			},
+			Results: planets,
+		}, 200)
+	} else {
+		handleIndexError(writer, err)
+	}
 }
 
-func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
-	writeJSON(writer, resource.Planet{
-		Name:           "",
-		RotationPeriod: "",
-		OrbitalPeriod:  "",
-		Diameter:       "",
-		Climate:        "",
-		Gravity:        "",
-		Terrain:        "",
-		SurfaceWater:   "",
-		Population:     "",
-		Residents:      nil,
-		Films:          nil,
-		Metadata:       resource.Metadata{},
-	}, 200)
+func PlanetHandler(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	planetId, err := strconv.Atoi(vars["id"])
+	planet, err := db.FindPlanet(planetId)
+
+	if err == nil {
+		writeJSON(writer, planet, 200)
+	} else {
+		handleFindError(writer, err)
+	}
 }
