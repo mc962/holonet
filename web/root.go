@@ -1,16 +1,13 @@
 package web
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
 func RootHandler(writer http.ResponseWriter, _ *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-	writer.Header().Set("Accept", "application/json")
-	_ = json.NewEncoder(writer).Encode(map[string]string{
+	writeJSON(writer, map[string]string{
 		"version": "0.1.0",
-	})
+	}, 200)
 }
 
 func APIRootHandler(writer http.ResponseWriter, request *http.Request) {
@@ -26,5 +23,5 @@ func APIRootHandler(writer http.ResponseWriter, request *http.Request) {
 		"starships": siteRoute(request, "/api/starships/"),
 	}
 
-	writeJSON(writer, siteRoutes)
+	writeJSON(writer, siteRoutes, 200)
 }

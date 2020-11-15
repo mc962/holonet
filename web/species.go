@@ -21,7 +21,7 @@ func AllSpeciesHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, ManySpecies{
 		ResponseData: ResponseData{},
 		Results:      nil,
-	})
+	}, 200)
 }
 
 func SpeciesHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -39,5 +39,5 @@ func SpeciesHandler(writer http.ResponseWriter, _ *http.Request) {
 		People:          nil,
 		Films:           nil,
 		Metadata:        resource.Metadata{},
-	})
+	}, 200)
 }

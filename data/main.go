@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func Initialize() (*pgx.Conn, Models) {
+func Initialize() *pgx.Conn {
 	config := pgx.ConnConfig{
 		Host:     "localhost",
 		Port:     5433,
@@ -19,27 +19,7 @@ func Initialize() (*pgx.Conn, Models) {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
 
-	models := RegisterModels(conn)
+	db.DB = conn
 
-	return conn, models
-}
-
-func RegisterModels(database *pgx.Conn) Models {
-	return Models{
-		Film:     db.Film{DB: database},
-		Person:   db.Person{DB: database},
-		Planet:   db.Planet{DB: database},
-		Species:  db.Species{DB: database},
-		Starship: db.Starship{DB: database},
-		Vehicle:  db.Vehicle{DB: database},
-	}
-}
-
-type Models struct {
-	Film     db.Film
-	Person   db.Person
-	Planet   db.Planet
-	Species  db.Species
-	Starship db.Starship
-	Vehicle  db.Vehicle
+	return conn
 }

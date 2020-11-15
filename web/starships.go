@@ -21,7 +21,7 @@ func StarshipsHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, Starships{
 		ResponseData: ResponseData{},
 		Results:      nil,
-	})
+	}, 200)
 }
 
 func StarshipHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -42,5 +42,5 @@ func StarshipHandler(writer http.ResponseWriter, _ *http.Request) {
 		Pilots:               nil,
 		Films:                nil,
 		Metadata:             resource.Metadata{},
-	})
+	}, 200)
 }

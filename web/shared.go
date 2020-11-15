@@ -5,3 +5,7 @@ type ResponseData struct {
 	Next     string `json:"next"`
 	Previous string `json:"previous"`
 }
+
+type ErrorResponse struct {
+	Message string `json:"message"`
+}

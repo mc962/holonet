@@ -21,7 +21,7 @@ func VehiclesHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, Vehicles{
 		Metadata: resource.Metadata{},
 		Results:  nil,
-	})
+	}, 200)
 }
 
 func VehicleHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -40,5 +40,5 @@ func VehicleHandler(writer http.ResponseWriter, _ *http.Request) {
 		Pilots:               nil,
 		Films:                nil,
 		Metadata:             resource.Metadata{},
-	})
+	}, 200)
 }

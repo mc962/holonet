@@ -21,7 +21,7 @@ func PlanetsHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, Planets{
 		ResponseData: ResponseData{},
 		Results:      nil,
-	})
+	}, 200)
 }
 
 func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -38,5 +38,5 @@ func PlanetHandler(writer http.ResponseWriter, _ *http.Request) {
 		Residents:      nil,
 		Films:          nil,
 		Metadata:       resource.Metadata{},
-	})
+	}, 200)
 }

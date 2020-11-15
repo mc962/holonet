@@ -21,7 +21,7 @@ func PeopleHandler(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, People{
 		ResponseData: ResponseData{},
 		Results:      nil,
-	})
+	}, 200)
 }
 
 func PersonHandler(writer http.ResponseWriter, _ *http.Request) {
@@ -40,5 +40,5 @@ func PersonHandler(writer http.ResponseWriter, _ *http.Request) {
 		Vehicles:  nil,
 		Starships: nil,
 		Metadata:  resource.Metadata{},
-	})
+	}, 200)
 }

@@ -22,11 +22,10 @@ type Env struct {
 	Router *mux.Router
 	Wait   time.Duration
 	Conn   *pgx.Conn
-	Models data.Models
 }
 
 func (env *Env) Initialize() {
-	env.Conn, env.Models = data.Initialize()
+	env.Conn = data.Initialize()
 	env.Router = web.Initialize()
 }
 

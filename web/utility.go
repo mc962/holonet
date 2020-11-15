@@ -7,9 +7,10 @@ import (
 	"strconv"
 )
 
-func writeJSON(writer http.ResponseWriter, response interface{}) {
+func writeJSON(writer http.ResponseWriter, response interface{}, statusCode int) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Header().Set("Accept", "application/json")
+	writer.WriteHeader(statusCode)
 
 	_ = json.NewEncoder(writer).Encode(response)
 }
