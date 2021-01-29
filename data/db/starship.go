@@ -1,7 +1,8 @@
 package db
 
 import (
-	"github.com/jackc/pgx"
+	"context"
+	"github.com/jackc/pgx/v4"
 	"holonet/data/resource"
 )
 
@@ -11,7 +12,7 @@ type Starship struct {
 
 func FindStarship(id int) (resource.Starship, error) {
 	var starship resource.Starship
-	row := DB.QueryRow("SELECT * FROM starships WHERE id = $1;", id)
+	row := DB.QueryRow(context.Background(), "SELECT * FROM starships WHERE id = $1;", id)
 
 	err := row.Scan(
 		&starship.Name,
@@ -39,7 +40,7 @@ func FindStarship(id int) (resource.Starship, error) {
 }
 
 func AllStarships() ([]resource.Starship, error) {
-	rows, err := DB.Query("SELECT * FROM starships;")
+	rows, err := DB.Query(context.Background(), "SELECT * FROM starships;")
 
 	if err != nil {
 		return nil, err

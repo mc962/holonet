@@ -1,20 +1,17 @@
 package data
 
 import (
-	"github.com/jackc/pgx"
+	"context"
+	"github.com/jackc/pgx/v4"
 	"holonet/data/db"
 	"log"
+	"os"
 )
 
 func Initialize() *pgx.Conn {
-	config := pgx.ConnConfig{
-		Host:     "localhost",
-		Port:     5433,
-		Database: "holonet_dev",
-		User:     "holonet_local",
-		Password: "local",
-	}
-	conn, err := pgx.Connect(config)
+	config, err := pgx.ParseConfig(os.Getenv("DATABASE_URL"))
+
+	conn, err := pgx.ConnectConfig(context.Background(), config)
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}

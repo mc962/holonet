@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4"
 	"holonet/data"
 	"holonet/web"
 	"log"
